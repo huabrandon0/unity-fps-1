@@ -8,7 +8,7 @@ public class PlayerUI : MonoBehaviour {
     private bool isPaused;
     [SerializeField] private GameObject pauseMenu = null;
     [SerializeField] private FPCamera cameraScript = null;
-
+    [SerializeField] private Behaviour[] componentsToDisableInMenu;
 
     void Awake()
     {
@@ -34,6 +34,8 @@ public class PlayerUI : MonoBehaviour {
 	
 	void Update ()
     {
+        // FIX LATER: change menu keycode to Esc on the actual build
+        // Unity has weird hotkeys built-in the game tab, so we're using "T" in the meantime.
 	    if (Input.GetKeyDown(KeyCode.T))
         {
             if (!this.isPaused)
@@ -55,8 +57,9 @@ public class PlayerUI : MonoBehaviour {
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
 
-        // Disable Player's Camera look
+        // Disable Player's Camera look, Player's ability to shoot
         this.cameraScript.SetLockCam(true);
+        DisableComponents();
 
         // Enable pause menu
         this.pauseMenu.SetActive(true);
@@ -68,10 +71,27 @@ public class PlayerUI : MonoBehaviour {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
-        // Enable Player's Camera look
+        // Enable Player's Camera look, Player's ability to shoot
         this.cameraScript.SetLockCam(false);
+        EnableComponents();
 
         // Disable pause menu
         this.pauseMenu.SetActive(false);
+    }
+
+    void DisableComponents()
+    {
+        for (int i = 0; i < this.componentsToDisableInMenu.Length; i++)
+        {
+            this.componentsToDisableInMenu[i].enabled = false;
+        }
+    }
+
+    void EnableComponents()
+    {
+        for (int i = 0; i < this.componentsToDisableInMenu.Length; i++)
+        {
+            this.componentsToDisableInMenu[i].enabled = true;
+        }
     }
 }

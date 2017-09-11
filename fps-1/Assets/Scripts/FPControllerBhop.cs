@@ -44,8 +44,9 @@ public class FPControllerBhop : MonoBehaviour {
     void Update()
     {
         // Jump
+        // TODO: InputManager doesn't support scrollwheel input. Must implement that.
         if (!this.jump)
-            this.jump = Input.GetKeyDown(KeyCode.Space) || Input.GetAxis("Mouse ScrollWheel") != 0;
+            this.jump = InputManager.GetKeyDown("Jump") || Input.GetAxisRaw("Mouse ScrollWheel") != 0;
 
         if (!this.previouslyGrounded && this.characterController.isGrounded)
         {
@@ -59,8 +60,12 @@ public class FPControllerBhop : MonoBehaviour {
         }
 
         // Horizontal movement
-        float h = Input.GetAxisRaw("Horizontal");
-        float v = Input.GetAxisRaw("Vertical");
+        float up = InputManager.GetKey("Strafe Up") ? 1 : 0;
+        float left = InputManager.GetKey("Strafe Left") ? -1 : 0;
+        float down = InputManager.GetKey("Strafe Down") ? -1 : 0;
+        float right = InputManager.GetKey("Strafe Right") ? 1 : 0;
+        float h = left + right;
+        float v = up + down;
 
         this.inputVec = new Vector2(h, v);
         if (this.inputVec.magnitude > 1)

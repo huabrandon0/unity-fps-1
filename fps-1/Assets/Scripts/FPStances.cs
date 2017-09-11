@@ -40,9 +40,9 @@ public class FPStances : MonoBehaviour {
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.LeftControl))
+        if (InputManager.GetKeyDown("Crouch"))
             Crouch();
-        else if (Input.GetKeyUp(KeyCode.LeftControl))
+        else if (InputManager.GetKeyUp("Crouch"))
             Uncrouch();
 
         if (this.targetStanceHasChanged)

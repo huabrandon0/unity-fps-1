@@ -14,7 +14,7 @@ public class FPLean : MonoBehaviour {
 
 
     [SerializeField] private float leanSpeed = 5f;              // Scales the speed at which the Player leans
-    [SerializeField] private float leanDistance = 0.5f;         // How much the Player's Camera is displaced horizontally when leaning
+    [SerializeField] private float leanDistance = 0.4f;         // How much the Player's Camera is displaced horizontally when leaning
     [SerializeField] private float leanRotationDegrees = 15f;   // How much the Player's Camera rotates when leaning
 
     
@@ -41,9 +41,9 @@ public class FPLean : MonoBehaviour {
 
     void Update()
     {
-        if (Input.GetButtonDown("LeanLeft"))
+        if (InputManager.GetKeyDown("Lean Left"))
             LeanLeft();
-        else if (Input.GetButtonDown("LeanRight"))
+        else if (InputManager.GetKeyDown("Lean Right"))
             LeanRight();
 
         if (this.targetOrientationHasChanged)
