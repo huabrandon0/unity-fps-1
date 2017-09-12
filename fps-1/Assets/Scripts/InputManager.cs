@@ -20,9 +20,7 @@ public static class InputManager {
 
         // Check if there are stored keybinds (i.e. in a config file)
     }
-
-    // FIX LATER: including the "Menu" action as a rewriteable keybind may break the GUI
-    // Solution: remove the bind, and simply hardcode "Menu" to Esc
+    
     private static string[] defaultKeys = new string[]
     {
         "Attack1",
@@ -34,7 +32,9 @@ public static class InputManager {
         "Jump",
         "Crouch",
         "Lean Left",
-        "Lean Right"
+        "Lean Right",
+        "Primary Weapon",
+        "Secondary Weapon"
     };
 
     private static KeyCode[][] defaultValues = new KeyCode[][]
@@ -48,7 +48,9 @@ public static class InputManager {
         new KeyCode[2]{ KeyCode.Space, KeyCode.None },
         new KeyCode[2]{ KeyCode.LeftControl, KeyCode.None },
         new KeyCode[2]{ KeyCode.Q, KeyCode.None },
-        new KeyCode[2]{ KeyCode.E, KeyCode.None }
+        new KeyCode[2]{ KeyCode.E, KeyCode.None },
+        new KeyCode[2]{ KeyCode.Alpha1, KeyCode.None },
+        new KeyCode[2]{ KeyCode.Alpha2, KeyCode.None },
     };
 
     public static bool GetKeyDown(string key)
