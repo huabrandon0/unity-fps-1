@@ -6,8 +6,9 @@ public class Weapon {
     public string name = "Pistol";
     public int damage = 10;
     public float range = 200f;
-    public int fireRate = 0;
+    public float fireRate = 0f;
     public GameObject weaponModel = null;
+
 
     void Awake()
     {

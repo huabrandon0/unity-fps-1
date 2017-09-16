@@ -7,6 +7,7 @@ public class Player : NetworkBehaviour {
     [SerializeField] private int maxHealth = 100;
     [SyncVar] private int currentHealth;
     [SyncVar] private bool isDead = false;
+
     public bool IsDead
     {
         get { return this.isDead; }

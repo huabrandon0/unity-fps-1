@@ -1,26 +1,19 @@
-﻿using UnityEngine;
-
-
-// Usage: this script is meant to be placed on a UI object.
+﻿// Usage: this script is meant to be placed on a UI object.
 // The UI object must be a child of the Player.
+
+using UnityEngine;
+
 public class PlayerUI : MonoBehaviour {
 
     private bool isPaused;
     [SerializeField] private GameObject pauseMenu = null;
-    [SerializeField] private FPCamera cameraScript = null;
-    [SerializeField] private Behaviour[] componentsToDisableInMenu;
+    [SerializeField] private TakesPlayerInput[] disableInputsWhilePaused;
 
     void Awake()
     {
         if (this.pauseMenu == null)
         {
             Debug.LogError(GetType() + ": No pause menu object assigned");
-            this.enabled = false;
-        }
-
-        if (this.cameraScript == null)
-        {
-            Debug.LogError(GetType() + ": No camera script assigned");
             this.enabled = false;
         }
     }
@@ -57,9 +50,8 @@ public class PlayerUI : MonoBehaviour {
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
 
-        // Disable Player's Camera look, Player's ability to shoot
-        this.cameraScript.SetLockCam(true);
-        DisableComponents();
+        // Disable Player's controls
+        DisableInputs();
 
         // Enable pause menu
         this.pauseMenu.SetActive(true);
@@ -71,27 +63,26 @@ public class PlayerUI : MonoBehaviour {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
-        // Enable Player's Camera look, Player's ability to shoot
-        this.cameraScript.SetLockCam(false);
-        EnableComponents();
+        // Enable Player's controls
+        EnableInputs();
 
         // Disable pause menu
         this.pauseMenu.SetActive(false);
     }
 
-    void DisableComponents()
+    void DisableInputs()
     {
-        for (int i = 0; i < this.componentsToDisableInMenu.Length; i++)
+        for (int i = 0; i < this.disableInputsWhilePaused.Length; i++)
         {
-            this.componentsToDisableInMenu[i].enabled = false;
+            this.disableInputsWhilePaused[i].DisableInput();
         }
     }
 
-    void EnableComponents()
+    void EnableInputs()
     {
-        for (int i = 0; i < this.componentsToDisableInMenu.Length; i++)
+        for (int i = 0; i < this.disableInputsWhilePaused.Length; i++)
         {
-            this.componentsToDisableInMenu[i].enabled = true;
+            this.disableInputsWhilePaused[i].EnableInput();
         }
     }
 }

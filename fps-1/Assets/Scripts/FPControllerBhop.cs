@@ -1,38 +1,77 @@
-﻿using UnityEngine;
-
-
-// Usage: this script is meant to be placed on a Player.
+﻿// Usage: this script is meant to be placed on a Player.
 // The Player must have a CharacterController component.
+
+using UnityEngine;
+
 [RequireComponent(typeof(CharacterController))]
-public class FPControllerBhop : MonoBehaviour {
+public class FPControllerBhop : TakesPlayerInput {
 
+    // Input state
+    private Vector2 inputVec;   // Horizontal movement input
+    private bool jump;          // Whether the jump key is inputted
+
+    // Inconstant member variables
+    private Vector3 moveVec;                    // Vector3 used to move the character controller
+    private float friction;
+    private bool isJumping = false;             // Player has jumped and not been grounded yet
+    private bool previouslyGrounded = false;    // Player was grounded during the last frame
+
+    // Constant member variables
     private CharacterController characterController;
-
 
     [SerializeField] private float gravityMultiplier = 1.6f;
     private float stickToGroundForce = 10f;
-    private float friction;
     [SerializeField] private float[] frictionConstants = { 5f, 10f };
-    
-    
-    private Vector2 inputVec;   // Horizontal movement input
-    private Vector3 moveVec;    // Vector3 used to move the character controller
-
-
-    private bool jump;                              // Whether the jump key is inputted
     [SerializeField] private float jumpSpeed = 5f;  // Initial upwards speed of the jump
-    private bool isJumping;                         // Player has jumped and not been grounded yet
-    private bool previouslyGrounded;                // Player was grounded during the last frame
-
-
     [SerializeField] private float groundAccel = 5f;
     [SerializeField] private float airAccel = 800f;
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float maxSpeedAir = 1.3f;
+    
 
+    protected override void GetInput()
+    {
+        if (!this.canReadInput)
+        {
+            return;
+        }
+
+        float up = InputManager.GetKey("Strafe Up") ? 1 : 0;
+        float left = InputManager.GetKey("Strafe Left") ? -1 : 0;
+        float down = InputManager.GetKey("Strafe Down") ? -1 : 0;
+        float right = InputManager.GetKey("Strafe Right") ? 1 : 0;
+        float h = left + right;
+        float v = up + down;
+        this.inputVec = new Vector2(h, v);
+        
+        // TODO: InputManager currently doesn't support scrollwheel input. Must implement that.
+        if (!this.jump)
+            this.jump = InputManager.GetKeyDown("Jump") || Input.GetAxisRaw("Mouse ScrollWheel") != 0;
+    }
+
+    protected override void ClearInput()
+    {
+        this.inputVec = Vector2.zero;
+        this.jump = false;
+    }
+
+    protected override void GetDefaultState()
+    {
+    }
+
+    protected override void SetDefaultState()
+    {
+        ClearInput();
+        this.moveVec = Vector3.zero;
+        this.friction = this.frictionConstants[0];
+        this.isJumping = false;
+        this.previouslyGrounded = false;
+    }
 
     void Awake()
     {
+        GetDefaultState();
+
         this.characterController = GetComponent<CharacterController>();
     }
 
@@ -41,13 +80,16 @@ public class FPControllerBhop : MonoBehaviour {
         SetDefaultState();
     }
 
+    public override void OnStartLocalPlayer()
+    {
+        SetDefaultState();
+    }
+
     void Update()
     {
-        // Jump
-        // TODO: InputManager doesn't support scrollwheel input. Must implement that.
-        if (!this.jump)
-            this.jump = InputManager.GetKeyDown("Jump") || Input.GetAxisRaw("Mouse ScrollWheel") != 0;
+        GetInput();
 
+        // Jump
         if (!this.previouslyGrounded && this.characterController.isGrounded)
         {
             this.moveVec.y = 0f;
@@ -60,14 +102,6 @@ public class FPControllerBhop : MonoBehaviour {
         }
 
         // Horizontal movement
-        float up = InputManager.GetKey("Strafe Up") ? 1 : 0;
-        float left = InputManager.GetKey("Strafe Left") ? -1 : 0;
-        float down = InputManager.GetKey("Strafe Down") ? -1 : 0;
-        float right = InputManager.GetKey("Strafe Right") ? 1 : 0;
-        float h = left + right;
-        float v = up + down;
-
-        this.inputVec = new Vector2(h, v);
         if (this.inputVec.magnitude > 1)
             this.inputVec = this.inputVec.normalized;
 
@@ -176,15 +210,5 @@ public class FPControllerBhop : MonoBehaviour {
     {
         if (i >= 0 && i < this.frictionConstants.Length)
             this.friction = this.frictionConstants[i];
-    }
-
-    void SetDefaultState()
-    {
-        this.friction = this.frictionConstants[0];
-        this.inputVec = Vector3.zero;
-        this.moveVec = Vector3.zero;
-        this.jump = false;
-        this.isJumping = false;
-        this.previouslyGrounded = false;
     }
 }

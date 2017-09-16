@@ -1,39 +1,114 @@
-﻿using UnityEngine;
+﻿// Usage: this script is meant to be placed on a Player.
+// The Player must be assigned a Camera to shoot from.
+// A WeaponManager component must be present.
+
+using UnityEngine;
 using UnityEngine.Networking;
+using System.Collections;
 
-
-// Usage: this script is meant to be placed on a Player.
-// The Player must have a child Camera to shoot from.
-// A WeaponManager component must also be present.
 [RequireComponent(typeof(WeaponManager))]
-public class FPShoot : NetworkBehaviour {
+public class FPShoot : TakesPlayerInput {
+    
+    // Input state
+    private bool shootKeyDown = false;
+    private bool shootKeyUp = false;
 
+    // Inconstant member variables
+    private bool canShoot = true;
+    private bool isShooting = false;
+    private Coroutine shootCoroutine = null;
+    private Weapon currentWeapon;
+
+    // Constant member variables
+    private WeaponManager weaponManager;
     [SerializeField] private LayerMask maskThatCanBeHit;
     [SerializeField] private Camera camToShootFrom;
     [SerializeField] private string PLAYER_TAG = "Player";
+    
 
-    private Weapon currentWeapon;
-    private WeaponManager weaponManager;
+    protected override void GetInput()
+    {
+        if (!this.canReadInput)
+        {
+            return;
+        }
 
+        this.shootKeyDown = InputManager.GetKeyDown("Attack1");
+        this.shootKeyUp = InputManager.GetKeyUp("Attack1");
+    }
+
+    protected override void ClearInput()
+    {
+        this.shootKeyDown = false;
+        this.shootKeyUp = false;
+    }
+
+    protected override void GetDefaultState()
+    {
+    }
+
+    protected override void SetDefaultState()
+    {
+        ClearInput();
+        this.isShooting = false;
+        StopShootCoroutine();
+        this.currentWeapon = this.weaponManager.GetCurrentWeapon();
+    }
 
     void Awake()
     {
-        this.camToShootFrom = GetComponentInChildren<Camera>();
+        GetDefaultState();
+
         if (this.camToShootFrom == null)
         {
-            Debug.LogError(GetType() + ": Player has no child Camera");
+            Debug.LogError(GetType() + ": Player has assigned Camera");
             this.enabled = false;
         }
 
         this.weaponManager = GetComponent<WeaponManager>();
     }
 
+    void OnEnable()
+    {
+        SetDefaultState();
+    }
+
+    public override void OnStartLocalPlayer()
+    {
+        SetDefaultState();
+    }
+
     void Update()
     {
+        GetInput();
+
         this.currentWeapon = this.weaponManager.GetCurrentWeapon();
 
-        if (InputManager.GetKeyDown("Attack1"))
-            Shoot();
+        if (this.canShoot)
+        {
+            if (this.currentWeapon.fireRate <= 0f)
+            {
+                // Tap fire
+                if (this.shootKeyDown)
+                {
+                    Shoot();
+                }
+            }
+            else
+            {
+                // Automatic fire
+                if (this.shootKeyDown && this.isShooting == false)
+                {
+                    this.isShooting = true;
+                    StartShootCoroutine();
+                }
+                else if (this.shootKeyUp && this.isShooting == true)
+                {
+                    this.isShooting = false;
+                    StopShootCoroutine();
+                }
+            }
+        }
     }
 
     [Client]
@@ -91,5 +166,44 @@ public class FPShoot : NetworkBehaviour {
     {
         GameObject bulletImpact = Instantiate(this.weaponManager.GetCurrentWeaponEffects().bulletImpact, pos, Quaternion.LookRotation(normal));
         Destroy(bulletImpact, 1f);
+    }
+
+    private IEnumerator ShootAutomatic(float timeBetweenShots)
+    {
+        while (true)
+        {
+            Shoot();
+            yield return new WaitForSeconds(timeBetweenShots);
+        }
+    }
+
+    private void StartShootCoroutine()
+    {
+        this.shootCoroutine = StartCoroutine(ShootAutomatic(1f / this.currentWeapon.fireRate));
+    }
+
+    private void StopShootCoroutine()
+    {
+        if (this.shootCoroutine != null)
+        {
+            StopCoroutine(this.shootCoroutine);
+            this.shootCoroutine = null;
+        }
+    }
+
+    public bool GetCanShoot()
+    {
+        return this.canShoot;
+    }
+
+    public void DisableShooting()
+    {
+        this.canShoot = false;
+        StopShootCoroutine();
+    }
+
+    public void EnableShooting()
+    {
+        this.canShoot = true;
     }
 }

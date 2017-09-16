@@ -1,56 +1,113 @@
-﻿using UnityEngine;
-using System.Collections;
-
-
-// Usage: this script is meant to be placed on a Player.
+﻿// Usage: this script is meant to be placed on a Player.
 // The Player must have a CharacterController component.
 // The Player must have a FPControllerBhop script to change friction constants. 
-[RequireComponent(typeof(CharacterController))]
-public class FPStances : MonoBehaviour {
 
-    private FPControllerBhop fpControllerBhop;
+using UnityEngine;
+using System.Collections;
+
+[RequireComponent(typeof(CharacterController), typeof(FPControllerBhop))]
+public class FPStances : TakesPlayerInput {
+
+    // Input state
+    private bool crouchKeyDown = false;
+    private bool crouchKeyUp = false;
+
+    // Default state
+    private float defaultHeight;
+
+    // Inconstant member variables
     private CharacterController characterController;
-
 
     private bool isCrouching = false;
     private bool targetStanceHasChanged = false;
     private Coroutine stanceCoroutine = null;
-
-
-    [SerializeField] private float crouchSpeed = 8f;    // Scales the speed at which the player transitions between stances
-
-    
+        
     private float standHeight;
     private float crouchHeight;
     private float targetHeight;
 
+    // Constant member variables
+    private FPControllerBhop fpControllerBhop;
+    
+    [SerializeField] private float crouchSpeed = 8f;    // Speed at which the player transitions between stances
+    
 
-    void Awake()
+    protected override void GetInput()
     {
-        this.fpControllerBhop = GetComponent<FPControllerBhop>();
-        this.characterController = GetComponent<CharacterController>();
+        if (!this.canReadInput)
+        {
+            return;
+        }
+
+        this.crouchKeyDown = InputManager.GetKeyDown("Crouch");
+        this.crouchKeyUp = InputManager.GetKeyUp("Crouch");
     }
 
-    void Start()
+    protected override void ClearInput()
     {
+        this.crouchKeyDown = false;
+        this.crouchKeyUp = false;
+    }
+
+    protected override void GetDefaultState()
+    {
+        this.defaultHeight = this.characterController.height;
+    }
+
+    protected override void SetDefaultState()
+    {
+        ClearInput();
+
+        this.isCrouching = false;
+        this.targetStanceHasChanged = false;
+        if (this.stanceCoroutine != null)
+        {
+            StopCoroutine(this.stanceCoroutine);
+            this.stanceCoroutine = null;
+        }
+
+        this.characterController.height = this.defaultHeight;
         this.standHeight = this.characterController.height;
         this.crouchHeight = this.standHeight / 2f;
         this.targetHeight = this.standHeight;
     }
 
+    void Awake()
+    {
+        this.fpControllerBhop = GetComponent<FPControllerBhop>();
+        this.characterController = GetComponent<CharacterController>();
+
+        GetDefaultState();
+    }
+
+    void OnEnable()
+    {
+        SetDefaultState();
+    }
+
+    public override void OnStartLocalPlayer()
+    {
+        SetDefaultState();
+    }
+
     void Update()
     {
-        if (InputManager.GetKeyDown("Crouch"))
+        GetInput();
+
+        if (this.crouchKeyDown)
             Crouch();
-        else if (InputManager.GetKeyUp("Crouch"))
+        else if (this.crouchKeyUp)
             Uncrouch();
 
         if (this.targetStanceHasChanged)
         {
             // The coroutine to change stances must be stopped if still running
             if (this.stanceCoroutine != null)
+            {
                 StopCoroutine(this.stanceCoroutine);   // This could possibly attempt to stop a coroutine after it has ended. Bad practice?
-            this.stanceCoroutine = StartCoroutine("GoToTargetStance");
+            }
+
+            this.stanceCoroutine = StartCoroutine(GoToTargetStance());
         }
     }
 
@@ -92,7 +149,7 @@ public class FPStances : MonoBehaviour {
             interpVal = (Time.time - startTime) * this.crouchSpeed;
 
             // Store the Player's position and height before any stance changes
-            Vector3 lastPos = this.transform.position;
+            Vector3 lastPos = this.transform.localPosition;
             float lastHeight = this.characterController.height;
 
             // Adjust the Player's height at a constant rate
@@ -100,7 +157,7 @@ public class FPStances : MonoBehaviour {
             
             // Adjust the Player's position such that bottom of the player remains at the same height
             lastPos[1] += (this.characterController.height - lastHeight) * 0.5f;
-            this.transform.position = lastPos;
+            this.transform.localPosition = lastPos;
         }
     }
 }
