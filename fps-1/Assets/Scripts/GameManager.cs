@@ -3,21 +3,16 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour {
 
-    public static GameManager instance = null;
+    private static GameManager instance = null;
+
+    public static GameManager GetInstance()
+    {
+        if (instance == null)
+            instance = (GameManager)FindObjectOfType(typeof(GameManager));
+        return instance;
+    }
 
     public MatchSettings matchSettings;
-
-    void Awake()
-    {
-        if (instance != null)
-        {
-            Debug.LogError(GetType() + "More than one GameManager in scene");
-        }
-        else
-        {
-            instance = this;
-        }
-    }
 
     #region Player tracking
 

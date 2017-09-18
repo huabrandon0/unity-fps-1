@@ -67,7 +67,10 @@ public class WeaponManager : TakesPlayerInput {
     {
         SetDefaultState();
     }
-    
+
+    // We override OnStartLocalPlayer because the "isLocalPlayer" property is not valid until it
+    // is called. We need to know the true value "isLocalPlayer" to set the weaponModel's layer
+    // correctly.
     public override void OnStartLocalPlayer()
     {
         SetDefaultState();

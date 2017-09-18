@@ -3,15 +3,13 @@ using UnityEngine.UI;
 using System;
 using System.Collections.Generic;
 
-public class KeybindGrid : MonoBehaviour {
+public class KeybindGridGenerator : MonoBehaviour {
 
     private Dictionary<string, KeyCode[]> keybinds;
     
-
     public GameObject text;
     public GameObject button;
-
-
+    
     private bool isSettingKeybind;
     private string keyToSet;
     private int valIndex;

@@ -85,11 +85,6 @@ public class FPStances : TakesPlayerInput {
         SetDefaultState();
     }
 
-    public override void OnStartLocalPlayer()
-    {
-        SetDefaultState();
-    }
-
     void Update()
     {
         GetInput();

@@ -95,7 +95,7 @@ public class Player : NetworkBehaviour {
         Debug.Log(this.transform.name + " died");
 
         // Respawn method
-        StartCoroutine(Respawn(GameManager.instance.matchSettings.respawnTime));
+        StartCoroutine(Respawn(GameManager.GetInstance().matchSettings.respawnTime));
     }
 
     private IEnumerator Respawn(float t)

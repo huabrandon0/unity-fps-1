@@ -73,11 +73,6 @@ public class FPShoot : TakesPlayerInput {
         SetDefaultState();
     }
 
-    public override void OnStartLocalPlayer()
-    {
-        SetDefaultState();
-    }
-
     void Update()
     {
         GetInput();

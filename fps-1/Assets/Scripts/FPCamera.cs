@@ -19,10 +19,11 @@ public class FPCamera : TakesPlayerInput {
     private Transform playerTransform;
 
     // Constant member variables
+    [SerializeField] private Camera cam;
     [SerializeField] private float sensitivity = 0.5f;
     [SerializeField] private float minimumX = -89f;
     [SerializeField] private float maximumX = 89f;
-    
+
 
     protected override void GetInput()
     {
@@ -88,5 +89,25 @@ public class FPCamera : TakesPlayerInput {
 
         Vector3 lastRot = this.transform.localRotation.eulerAngles;
         this.transform.localRotation = Quaternion.Euler(this.xRotation, 0f, lastRot.z);
+    }
+
+    public void SetMouseSensitivity(float sens)
+    {
+        this.sensitivity = sens;
+    }
+
+    public float GetMouseSensitivity()
+    {
+        return this.sensitivity;
+    }
+    
+    public void SetFOV(float fov)
+    {
+        this.cam.fieldOfView = fov;
+    }
+
+    public float GetFOV(float fov)
+    {
+        return this.cam.fieldOfView;
     }
 }
