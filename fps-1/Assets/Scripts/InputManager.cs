@@ -34,7 +34,8 @@ public static class InputManager {
         "Lean Left",
         "Lean Right",
         "Primary Weapon",
-        "Secondary Weapon"
+        "Secondary Weapon",
+        "Zoom"
     };
 
     private static KeyCode[][] defaultValues = new KeyCode[][]
@@ -51,6 +52,7 @@ public static class InputManager {
         new KeyCode[2]{ KeyCode.E, KeyCode.None },
         new KeyCode[2]{ KeyCode.Alpha1, KeyCode.None },
         new KeyCode[2]{ KeyCode.Alpha2, KeyCode.None },
+        new KeyCode[2]{ KeyCode.Mouse1, KeyCode.None }
     };
 
     public static bool GetKeyDown(string key)

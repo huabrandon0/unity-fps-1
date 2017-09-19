@@ -1,6 +1,9 @@
 ﻿// Usage: this script is meant to be placed on a Camera.
-// This script makes changes to Transform as if its neutral position and rotation are both (0, 0, 0).
-// This means any mouse-look-type script must make changes to the parent of the Camera this is placed on, rather than the Camera itself.
+
+// This script makes changes to the Transform as if its neutral position and rotation are both
+// (0, 0, 0). This means any other script that wants to change the Camera's Transform must make
+// changes to the parent Transform of the Camera this is placed on, rather than the Camera
+// Transform itself.
 
 using UnityEngine;
 using System.Collections;

@@ -8,6 +8,7 @@ public class FPCamera : TakesPlayerInput {
     // Input state
     private float xRotation;
     private float yRotation;
+    private bool zoom;
     
     // Default state
     private Quaternion defaultPlayerRot;
@@ -17,12 +18,65 @@ public class FPCamera : TakesPlayerInput {
 
     // Inconstant member variables
     private Transform playerTransform;
+    private float sens;
+    private bool isZoomed = false;
 
     // Constant member variables
     [SerializeField] private Camera cam;
-    [SerializeField] private float sensitivity = 0.5f;
     [SerializeField] private float minimumX = -89f;
     [SerializeField] private float maximumX = 89f;
+    [SerializeField] private float sensitivity = 0.5f;
+    public float Sensitivity
+    {
+        get
+        {
+            return this.sensitivity;
+        }
+        set
+        {
+            this.sensitivity = value;
+            RefreshState();
+        }
+    }
+    [SerializeField] private float fov = 65f;
+    public float Fov
+    {
+        get
+        {
+            return this.fov;
+        }
+        set
+        {
+            this.fov = value;
+            RefreshState();
+        }
+    }
+    [SerializeField] private float zoomSensitivity = 0.3f;
+    public float ZoomSensitivity
+    {
+        get
+        {
+            return this.zoomSensitivity;
+        }
+        set
+        {
+            this.zoomSensitivity = value;
+            RefreshState();
+        }
+    }
+    [SerializeField] public float zoomFov = 50f;
+    public float ZoomFov
+    {
+        get
+        {
+            return this.zoomFov;
+        }
+        set
+        {
+            this.zoomFov = value;
+            RefreshState();
+        }
+    }
 
 
     protected override void GetInput()
@@ -33,8 +87,10 @@ public class FPCamera : TakesPlayerInput {
         }
 
         // Retrieve mouse input
-        this.xRotation -= Input.GetAxis("Mouse Y") * this.sensitivity;
-        this.yRotation += Input.GetAxis("Mouse X") * this.sensitivity;
+        this.xRotation -= Input.GetAxis("Mouse Y") * this.sens;
+        this.yRotation += Input.GetAxis("Mouse X") * this.sens;
+
+        this.zoom = InputManager.GetKeyDown("Zoom");
     }
 
     protected override void ClearInput()
@@ -59,6 +115,9 @@ public class FPCamera : TakesPlayerInput {
         this.transform.localRotation = this.defaultCamRot;
         this.xRotation = this.defaultXRotation;
         this.yRotation = this.defaultYRotation;
+        this.isZoomed = false;
+        this.sens = this.Sensitivity;
+        this.cam.fieldOfView = this.Fov;
     }
 
     void Awake()
@@ -89,25 +148,46 @@ public class FPCamera : TakesPlayerInput {
 
         Vector3 lastRot = this.transform.localRotation.eulerAngles;
         this.transform.localRotation = Quaternion.Euler(this.xRotation, 0f, lastRot.z);
+
+        // Zoom
+        if (this.zoom)
+        {
+            if (this.isZoomed)
+            {
+                Unzoom();
+            }
+            else
+            {
+                Zoom();
+            }
+        }
     }
 
-    public void SetMouseSensitivity(float sens)
+    void Zoom()
     {
-        this.sensitivity = sens;
+        this.isZoomed = true;
+        this.sens = ZoomSensitivity;
+        this.cam.fieldOfView = ZoomFov;
     }
 
-    public float GetMouseSensitivity()
+    void Unzoom()
     {
-        return this.sensitivity;
-    }
-    
-    public void SetFOV(float fov)
-    {
-        this.cam.fieldOfView = fov;
+        this.isZoomed = false;
+        this.sens = Sensitivity;
+        this.cam.fieldOfView = Fov;
     }
 
-    public float GetFOV(float fov)
+    void RefreshState()
     {
-        return this.cam.fieldOfView;
+        if (this.isZoomed)
+        {
+            this.sens = ZoomSensitivity;
+            this.cam.fieldOfView = ZoomFov;
+        }
+        else
+        {
+            this.sens = Sensitivity;
+            this.cam.fieldOfView = Fov;
+        }
     }
 }
