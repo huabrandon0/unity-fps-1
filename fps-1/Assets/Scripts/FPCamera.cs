@@ -20,6 +20,8 @@ public class FPCamera : TakesPlayerInput {
     private Transform playerTransform;
     private float sens;
     private bool isZoomed = false;
+    [SerializeField] private GameObject scopeOverlay;
+    [SerializeField] private Camera viewmodelCam;
 
     // Constant member variables
     [SerializeField] private Camera cam;
@@ -98,6 +100,8 @@ public class FPCamera : TakesPlayerInput {
         // The rotation of the camera is an accumulation of previous mouse 
         // inputs, so we cannot "clear" inputs without resetting the rotation.
         // Thus, we have an empty implementation.
+
+        this.zoom = false;
     }
     
     protected override void GetDefaultState()
@@ -118,6 +122,8 @@ public class FPCamera : TakesPlayerInput {
         this.isZoomed = false;
         this.sens = this.Sensitivity;
         this.cam.fieldOfView = this.Fov;
+        this.scopeOverlay.SetActive(false);
+        this.viewmodelCam.enabled = true;
     }
 
     void Awake()
@@ -168,6 +174,8 @@ public class FPCamera : TakesPlayerInput {
         this.isZoomed = true;
         this.sens = ZoomSensitivity;
         this.cam.fieldOfView = ZoomFov;
+        this.scopeOverlay.SetActive(true);
+        this.viewmodelCam.enabled = false;
     }
 
     void Unzoom()
@@ -175,6 +183,8 @@ public class FPCamera : TakesPlayerInput {
         this.isZoomed = false;
         this.sens = Sensitivity;
         this.cam.fieldOfView = Fov;
+        this.scopeOverlay.SetActive(false);
+        this.viewmodelCam.enabled = true;
     }
 
     void RefreshState()

@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using UnityEngine.Events;
+using System;
 
 public static class Util {
 
@@ -22,3 +24,5 @@ public static class Util {
         }
     }
 }
+
+[Serializable] public class FloatEditorEvent : UnityEvent <float, FloatEditor> {}

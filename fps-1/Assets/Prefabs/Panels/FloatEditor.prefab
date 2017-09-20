@@ -135,8 +135,9 @@ GameObject:
   - component: {fileID: 224557324422187988}
   - component: {fileID: 114795812304874888}
   - component: {fileID: 114383472254644668}
+  - component: {fileID: 114284461272354418}
   m_Layer: 5
-  m_Name: ValueEditor
+  m_Name: FloatEditor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -280,7 +281,25 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: 50
+  m_Text: 0
+--- !u!114 &114284461272354418
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1723344664438502}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6527b2d88131aff429773972e7fe5404, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  label: {fileID: 114480153582668762}
+  slider: {fileID: 114864222104433206}
+  inputField: {fileID: 114757753287446416}
+  onValueSet:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: FloatEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
 --- !u!114 &114383472254644668
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -484,7 +503,7 @@ MonoBehaviour:
   m_CaretColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
   m_CustomCaretColor: 0
   m_SelectionColor: {r: 0.65882355, g: 0.80784315, b: 1, a: 0.7529412}
-  m_Text: 50
+  m_Text: 0
   m_CaretBlinkRate: 0.85
   m_CaretWidth: 1
   m_ReadOnly: 0
@@ -549,10 +568,10 @@ MonoBehaviour:
   m_FillRect: {fileID: 224820032894112170}
   m_HandleRect: {fileID: 224557835309511948}
   m_Direction: 0
-  m_MinValue: 40
-  m_MaxValue: 90
+  m_MinValue: 0
+  m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 50
+  m_Value: 0
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
@@ -677,7 +696,7 @@ RectTransform:
   m_GameObject: {fileID: 1723344664438502}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.99999607, y: 0.99999607, z: 0.99999607}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 224912001246743256}
   - {fileID: 224142558505495704}
