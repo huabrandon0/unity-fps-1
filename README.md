@@ -4,10 +4,13 @@ Counter-Strike-inspired multiplayer FPS game made in Unity. It makes use of Unit
 Here are gifs of the some of the game's functionalities:
 
 FOV Slider
-
 ![FOV Slider](https://i.imgur.com/1wGPnsb.gif)
 
 
-Lean
+Leaning
+![Leaning](https://i.imgur.com/cSwDPPG.gif)
 
-![Lean](https://i.imgur.com/cSwDPPG.gif)
+
+Bunnyhopping
+![Bunnyhopping](https://i.imgur.com/JiPsiSx.gif)
+
