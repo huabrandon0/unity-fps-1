@@ -6,5 +6,4 @@ FOV Slider
 ![FOV Slider](https://i.imgur.com/1wGPnsb.gif)
 
 Lean
-![Lean](https://i.imgur.com/cSwDPPG.gifv)
-
+![Lean](https://i.imgur.com/cSwDPPG.gif)
