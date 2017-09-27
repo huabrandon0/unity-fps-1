@@ -3,30 +3,30 @@ This project is a multiplayer FPS game made in Unity. I have many goals in doing
 
 ### Here are gifs of some of the game's functionalities:
 
-##### Gameplay mechanics
+#### Gameplay mechanics
 
-Shooting (with raycasts)
+- Shooting (with raycasts)
 
 ![Shooting](https://i.imgur.com/x1CoYwM.gif)
 
 
-Bunnyhopping
+- Bunnyhopping
 
 ![Bunnyhopping](https://i.imgur.com/JiPsiSx.gif)
 
 
-Leaning
+- Leaning
 
 ![Leaning](https://i.imgur.com/cSwDPPG.gif)
 
 
-##### UI
+#### UI
 
-Sensitivity Slider
+- Sensitivity Slider
 
 ![Sensitivity Slider](https://i.imgur.com/zgLLnX1.gif)
 
 
-FOV Slider
+- FOV Slider
 
 ![FOV Slider](https://i.imgur.com/M7v0QOs.gif)
