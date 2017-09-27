@@ -13,6 +13,11 @@ FOV Slider
 ![FOV Slider](https://i.imgur.com/M7v0QOs.gif)
 
 
+Shooting (with raycasts)
+
+![Shooting](https://i.imgur.com/x1CoYwM.gif)
+
+
 Bunnyhopping
 
 ![Bunnyhopping](https://i.imgur.com/JiPsiSx.gif)
