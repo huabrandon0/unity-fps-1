@@ -10,7 +10,7 @@ Sensitivity Slider
 
 FOV Slider
 
-![FOV Slider](https://i.imgur.com/1wGPnsb.gif)
+![FOV Slider](https://i.imgur.com/M7v0QOs.gif)
 
 
 Bunnyhopping
