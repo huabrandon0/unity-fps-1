@@ -90,7 +90,7 @@ public class WeaponManager : TakesPlayerInput {
             EquipWeapon(this.secondaryWeapon);
             this.shootScript.DisableShooting();
         }
-        else if (!this.shootScript.GetCanShoot())
+        else if (!this.shootScript.CanShoot)
         {
             // Probably should put a timer to disable/enable shooting based on weapon takeout time
             this.shootScript.EnableShooting();

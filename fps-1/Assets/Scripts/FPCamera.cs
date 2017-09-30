@@ -8,7 +8,6 @@ public class FPCamera : TakesPlayerInput {
     // Input state
     private float xRotation;
     private float yRotation;
-    private bool zoom;
     
     // Default state
     private Quaternion defaultPlayerRot;
@@ -19,7 +18,7 @@ public class FPCamera : TakesPlayerInput {
     // Inconstant member variables
     private Transform playerTransform;
     private float sens;
-    private bool isZoomed = false;
+    public bool IsZoomed { get; private set; }
     [SerializeField] private GameObject scopeOverlay;
     [SerializeField] private Camera viewmodelCam;
 
@@ -91,8 +90,6 @@ public class FPCamera : TakesPlayerInput {
         // Retrieve mouse input
         this.xRotation -= Input.GetAxis("Mouse Y") * this.sens;
         this.yRotation += Input.GetAxis("Mouse X") * this.sens;
-
-        this.zoom = InputManager.GetKeyDown("Zoom");
     }
 
     protected override void ClearInput()
@@ -100,8 +97,6 @@ public class FPCamera : TakesPlayerInput {
         // The rotation of the camera is an accumulation of previous mouse 
         // inputs, so we cannot "clear" inputs without resetting the rotation.
         // Thus, we have an empty implementation.
-
-        this.zoom = false;
     }
     
     protected override void GetDefaultState()
@@ -119,11 +114,7 @@ public class FPCamera : TakesPlayerInput {
         this.transform.localRotation = this.defaultCamRot;
         this.xRotation = this.defaultXRotation;
         this.yRotation = this.defaultYRotation;
-        this.isZoomed = false;
-        this.sens = this.Sensitivity;
-        this.cam.fieldOfView = this.Fov;
-        this.scopeOverlay.SetActive(false);
-        this.viewmodelCam.enabled = true;
+        Unzoom();
     }
 
     void Awake()
@@ -154,33 +145,20 @@ public class FPCamera : TakesPlayerInput {
 
         Vector3 lastRot = this.transform.localRotation.eulerAngles;
         this.transform.localRotation = Quaternion.Euler(this.xRotation, 0f, lastRot.z);
-
-        // Zoom
-        if (this.zoom)
-        {
-            if (this.isZoomed)
-            {
-                Unzoom();
-            }
-            else
-            {
-                Zoom();
-            }
-        }
     }
 
-    void Zoom()
+    public void Zoom()
     {
-        this.isZoomed = true;
+        this.IsZoomed = true;
         this.sens = ZoomSensitivity;
         this.cam.fieldOfView = ZoomFov;
         this.scopeOverlay.SetActive(true);
         this.viewmodelCam.enabled = false;
     }
 
-    void Unzoom()
+    public void Unzoom()
     {
-        this.isZoomed = false;
+        this.IsZoomed = false;
         this.sens = Sensitivity;
         this.cam.fieldOfView = Fov;
         this.scopeOverlay.SetActive(false);
@@ -189,7 +167,7 @@ public class FPCamera : TakesPlayerInput {
 
     void RefreshState()
     {
-        if (this.isZoomed)
+        if (this.IsZoomed)
         {
             this.sens = ZoomSensitivity;
             this.cam.fieldOfView = ZoomFov;

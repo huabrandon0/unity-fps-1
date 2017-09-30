@@ -1,6 +1,7 @@
 ﻿// Usage: this script is meant to be placed on a Player.
 // The Player must be assigned a Camera to shoot from.
 // A WeaponManager component must be present.
+// An FPCamera script must be assigned for its zooming capabilities.
 
 using UnityEngine;
 using UnityEngine.Networking;
@@ -12,9 +13,10 @@ public class FPShoot : TakesPlayerInput {
     // Input state
     private bool shootKeyDown = false;
     private bool shootKeyUp = false;
+    private bool zoom = false;
 
     // Inconstant member variables
-    private bool canShoot = true;
+    public bool CanShoot { get; private set; }
     private bool isShooting = false;
     private Coroutine shootCoroutine = null;
     private Weapon currentWeapon;
@@ -24,6 +26,7 @@ public class FPShoot : TakesPlayerInput {
     [SerializeField] private LayerMask maskThatCanBeHit;
     [SerializeField] private Camera camToShootFrom;
     [SerializeField] private string PLAYER_TAG = "Player";
+    [SerializeField] private FPCamera cameraScript;
     
 
     protected override void GetInput()
@@ -35,6 +38,8 @@ public class FPShoot : TakesPlayerInput {
 
         this.shootKeyDown = InputManager.GetKeyDown("Attack1");
         this.shootKeyUp = InputManager.GetKeyUp("Attack1");
+
+        this.zoom = InputManager.GetKeyDown("Zoom");
     }
 
     protected override void ClearInput()
@@ -50,8 +55,11 @@ public class FPShoot : TakesPlayerInput {
     protected override void SetDefaultState()
     {
         ClearInput();
+
+        this.CanShoot = true;
         this.isShooting = false;
         StopShootCoroutine();
+
         this.currentWeapon = this.weaponManager.GetCurrentWeapon();
     }
 
@@ -78,8 +86,13 @@ public class FPShoot : TakesPlayerInput {
         GetInput();
 
         this.currentWeapon = this.weaponManager.GetCurrentWeapon();
+        if (this.cameraScript.IsZoomed && !this.currentWeapon.isZoomable)
+        {
+            this.cameraScript.Unzoom();
+        }
 
-        if (this.canShoot)
+        // Shoot
+        if (this.CanShoot)
         {
             if (this.currentWeapon.fireRate <= 0f)
             {
@@ -102,6 +115,19 @@ public class FPShoot : TakesPlayerInput {
                     this.isShooting = false;
                     StopShootCoroutine();
                 }
+            }
+        }
+
+        // Zoom
+        if (this.zoom && this.currentWeapon.isZoomable)
+        {
+            if (this.cameraScript.IsZoomed)
+            {
+                this.cameraScript.Unzoom();
+            }
+            else
+            {
+                this.cameraScript.Zoom();
             }
         }
     }
@@ -186,19 +212,14 @@ public class FPShoot : TakesPlayerInput {
         }
     }
 
-    public bool GetCanShoot()
-    {
-        return this.canShoot;
-    }
-
     public void DisableShooting()
     {
-        this.canShoot = false;
+        this.CanShoot = false;
         StopShootCoroutine();
     }
 
     public void EnableShooting()
     {
-        this.canShoot = true;
+        this.CanShoot = true;
     }
 }

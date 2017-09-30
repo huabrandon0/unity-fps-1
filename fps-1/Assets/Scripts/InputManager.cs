@@ -18,13 +18,14 @@ public static class InputManager {
             keybinds.Add(defaultKeys[i], defaultValues[i]);
         }
 
-        // Check if there are stored keybinds (i.e. in a config file)
+        // TODO: check if there are stored keybinds (i.e. in a config file)
     }
     
     private static string[] defaultKeys = new string[]
     {
         "Attack1",
         "Attack2",
+        "Zoom",
         "Strafe Up",
         "Strafe Left",
         "Strafe Down",
@@ -34,13 +35,13 @@ public static class InputManager {
         "Lean Left",
         "Lean Right",
         "Primary Weapon",
-        "Secondary Weapon",
-        "Zoom"
+        "Secondary Weapon"
     };
 
     private static KeyCode[][] defaultValues = new KeyCode[][]
     {
         new KeyCode[2]{ KeyCode.Mouse0, KeyCode.None },
+        new KeyCode[2]{ KeyCode.Mouse1, KeyCode.None },
         new KeyCode[2]{ KeyCode.Mouse1, KeyCode.None },
         new KeyCode[2]{ KeyCode.W, KeyCode.UpArrow },
         new KeyCode[2]{ KeyCode.A, KeyCode.LeftArrow },
@@ -51,8 +52,7 @@ public static class InputManager {
         new KeyCode[2]{ KeyCode.Q, KeyCode.None },
         new KeyCode[2]{ KeyCode.E, KeyCode.None },
         new KeyCode[2]{ KeyCode.Alpha1, KeyCode.None },
-        new KeyCode[2]{ KeyCode.Alpha2, KeyCode.None },
-        new KeyCode[2]{ KeyCode.Mouse1, KeyCode.None }
+        new KeyCode[2]{ KeyCode.Alpha2, KeyCode.None }
     };
 
     public static bool GetKeyDown(string key)

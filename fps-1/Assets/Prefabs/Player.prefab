@@ -1462,7 +1462,7 @@ MonoBehaviour:
     m_Top: 50
     m_Bottom: 50
   m_ChildAlignment: 1
-  m_Spacing: 50
+  m_Spacing: 10
   m_ChildForceExpandWidth: 0
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 0
@@ -2212,7 +2212,7 @@ MonoBehaviour:
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 1
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -2697,9 +2697,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   primaryWeapon:
     name: Sniper
-    damage: 80
+    damage: 100
     range: 200
     fireRate: 0
+    isZoomable: 1
     weaponModel: {fileID: 1196270030770812, guid: 19de40c5c5e4b5d45ae1d24cb576a670,
       type: 2}
   secondaryWeapon:
@@ -2707,6 +2708,7 @@ MonoBehaviour:
     damage: 20
     range: 200
     fireRate: 10
+    isZoomable: 0
     weaponModel: {fileID: 1844365396755498, guid: 9526904c061cdfb4ca7a0c1feece38b5,
       type: 2}
   weaponBase: {fileID: 4557972478414712}
@@ -2755,6 +2757,7 @@ MonoBehaviour:
     m_Bits: 4294966015
   camToShootFrom: {fileID: 20620719359189240}
   PLAYER_TAG: Player
+  cameraScript: {fileID: 114156826561871422}
 --- !u!114 &114625862887668996
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2891,7 +2894,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 55e1b89977b1d634687e18823123501e, type: 3}
+  m_Sprite: {fileID: 21300000, guid: dcf1b76295c154d468037c91069728d0, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -4910,7 +4913,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1920, y: 1080}
+  m_SizeDelta: {x: 2520, y: 1080}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224657889049319792
 RectTransform:
